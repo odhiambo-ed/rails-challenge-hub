@@ -10,9 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_06_180522) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_06_201446) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "challenge_tags", force: :cascade do |t|
+    t.bigint "challenge_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_challenge_tags_on_challenge_id"
+    t.index ["tag_id"], name: "index_challenge_tags_on_tag_id"
+  end
+
+  create_table "challenges", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.string "difficulty_level"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_challenges_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.bigint "solution_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["solution_id"], name: "index_comments_on_solution_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "solutions", force: :cascade do |t|
+    t.text "code"
+    t.text "explanation"
+    t.bigint "user_id", null: false
+    t.bigint "challenge_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_solutions_on_challenge_id"
+    t.index ["user_id"], name: "index_solutions_on_user_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -28,4 +74,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_06_180522) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.integer "value"
+    t.bigint "user_id", null: false
+    t.bigint "solution_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["solution_id"], name: "index_votes_on_solution_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
+  add_foreign_key "challenge_tags", "challenges"
+  add_foreign_key "challenge_tags", "tags"
+  add_foreign_key "challenges", "users"
+  add_foreign_key "comments", "solutions"
+  add_foreign_key "comments", "users"
+  add_foreign_key "solutions", "challenges"
+  add_foreign_key "solutions", "users"
+  add_foreign_key "votes", "solutions"
+  add_foreign_key "votes", "users"
 end
