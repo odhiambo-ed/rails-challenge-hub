@@ -15,4 +15,18 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
+
+    namespace :api do
+    namespace :v1 do
+      resources :challenges do
+        resources :solutions do
+          resources :comments
+          resources :votes, only: [:create, :update, :destroy]
+        end
+        resources :tags, only: [:index, :create, :destroy]
+      end
+      
+      resources :tags, only: [:index, :show]
+    end
+  end
 end
