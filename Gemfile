@@ -49,3 +49,7 @@ end
 gem 'devise'
 gem 'devise-jwt'
 gem 'jsonapi-serializer'
+
+gem 'bigdecimal'
+gem 'mutex_m'
+
