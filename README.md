@@ -1,24 +1,86 @@
-# README
+# ERD
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+erDiagram
+    User ||--o{ Challenge : creates
+    User ||--o{ Solution : submits
+    User ||--o{ Comment : writes
+    User ||--o{ Vote : casts
+    
+    Challenge ||--o{ Solution : has
+    Challenge ||--o{ ChallengeTag : has
+    ChallengeTag }o--|| Tag : belongs_to
+    
+    Solution ||--o{ Comment : receives
+    Solution ||--o{ Vote : receives
 
-Things you may want to cover:
+    User {
+        integer id PK
+        string email
+        string encrypted_password
+        string reset_password_token
+        datetime reset_password_sent_at
+        datetime remember_created_at
+        datetime created_at
+        datetime updated_at
+    }
 
-* Ruby version
+    Challenge {
+        integer id PK
+        string title
+        text description
+        string difficulty_level
+        integer user_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-* System dependencies
+    Solution {
+        integer id PK
+        text code
+        text explanation
+        integer user_id FK
+        integer challenge_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-* Configuration
+    Comment {
+        integer id PK
+        text content
+        integer user_id FK
+        integer solution_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-* Database creation
+    Vote {
+        integer id PK
+        integer value
+        integer user_id FK
+        integer solution_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-* Database initialization
+    Tag {
+        integer id PK
+        string name
+        datetime created_at
+        datetime updated_at
+    }
 
-* How to run the test suite
+    ChallengeTag {
+        integer id PK
+        integer challenge_id FK
+        integer tag_id FK
+        datetime created_at
+        datetime updated_at
+    }
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    JwtBlacklist {
+        integer id PK
+        string jti
+        datetime exp
+        datetime created_at
+        datetime updated_at
+    }
